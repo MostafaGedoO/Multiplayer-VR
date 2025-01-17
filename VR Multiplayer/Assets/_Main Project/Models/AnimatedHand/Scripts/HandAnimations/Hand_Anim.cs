@@ -1,7 +1,8 @@
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Cloves_Anim : MonoBehaviour
+public class Cloves_Anim : NetworkBehaviour
 {
     [SerializeField] private InputActionReference _tirggerValue;
     [SerializeField] private InputActionReference _grabValue;
@@ -17,6 +18,8 @@ public class Cloves_Anim : MonoBehaviour
 
     private void OnEnable()
     {
+        if(!IsOwner) return;
+        
         //Reseting 
         _tirggerValue.action.Reset();
         _grabValue.action.Reset();
@@ -36,6 +39,8 @@ public class Cloves_Anim : MonoBehaviour
 
     private void OnDisable()
     {
+        if(!IsOwner) return;
+        
         _tirggerValue.action.started -= StartTriggerReading;
         _grabValue.action.started -= StartGrabReading;
         _tirggerValue.action.canceled -= StopTriggerReading;
@@ -45,6 +50,8 @@ public class Cloves_Anim : MonoBehaviour
 
     private void Update()
     {
+        if(!IsOwner) return;
+        
         if (_readGrabValues)
         {
             float value = _grabValue.action.ReadValue<float>();
